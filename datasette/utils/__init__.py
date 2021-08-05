@@ -345,9 +345,18 @@ def make_dockerfile(
             "SQLITE_EXTENSIONS"
         ] = "/usr/lib/x86_64-linux-gnu/mod_spatialite.so"
     return """
-FROM python:3.9
+FROM python:3.9-slim-buster
 COPY . /app
 WORKDIR /app
+RUN apt-get update && \
+    apt-get -y --no-install-recommends install software-properties-common && \
+    add-apt-repository "deb http://httpredir.debian.org/debian sid main" && \
+    apt-get update && \
+    apt-get -t sid install -y --no-install-recommends sqlite3 && \
+    apt-get remove -y software-properties-common && \
+    apt clean && \
+    rm -rf /var/lib/apt && \
+    rm -rf /var/lib/dpkg/info/*
 {apt_get_extras}
 {environment_variables}
 RUN pip install -U {install_from}
