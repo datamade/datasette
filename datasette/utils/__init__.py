@@ -345,7 +345,7 @@ def make_dockerfile(
             "SQLITE_EXTENSIONS"
         ] = "/usr/lib/x86_64-linux-gnu/mod_spatialite.so"
     return """
-FROM python:3.8
+FROM python:3.9
 COPY . /app
 WORKDIR /app
 {apt_get_extras}
